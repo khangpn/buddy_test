@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if questionaire %}
+    <ul>
+    {% for question in questionaire.questions %}
+        <li><a href="{% url 'questionaire:detail' question.id }">{{ question.question_text }}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}

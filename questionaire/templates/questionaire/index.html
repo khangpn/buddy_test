@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if questionaires %}
+    <ul>
+    {% for questionaire in questionaires %}
+        <li><a href="{% url 'questionaire:detail' questionaire.id %}">{{ questionaire.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No questionaires are available.</p>
+{% endif %}
+
+{% endblock %}
