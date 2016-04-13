@@ -25,6 +25,7 @@ class Question(models.Model):
         ('YesNoQuestion', 'Yes/No Question'),
         ('MultipleChoiceQuestion', 'Multiple Choice Question'),
     )
+    TYPES_LIST = ['TextQuestion', 'YesNoQuestion', 'MultipleChoiceQuestion']
     questionaire = models.ForeignKey(Questionaire, on_delete=models.CASCADE)
     question_text = models.CharField(max_length=512, unique=True)
     question_type = models.CharField(max_length=128, choices=QUESTION_TYPES)
@@ -36,20 +37,52 @@ class Question(models.Model):
         return self.question_text;
 
     def save(self, *args, **kwargs):
+        # Update time
         if not self.id:
             self.created_at = timezone.now()
         self.updated_at = timezone.now()
-        return super(Question, self).save(*args, **kwargs)
+
+        # Create corresponding question meta data
+        # This should go to the view if we have custom view for CRUD
+        question_meta = None
+        print self.question_type
+        if not self.id:
+            if self.question_type in Question.TYPES_LIST:
+                print "===================="
+                question_meta = eval(self.question_type)()
+            #if self.question_type == "TextQuestion":
+            #    question_meta = TextQuestion()
+            #elif self.question_type == "YesNoQuestion":
+            #    question_meta = YesNoQuestion()
+            #elif self.question_type == "MultipleChoiceQuestion":
+            #    question_meta = MultipleChoiceQuestion()
+
+        super(Question, self).save(*args, **kwargs)
+
+        if question_meta:
+            question_meta.question = self
+            question_meta.save()
+
+        return
 
 class TextQuestion(models.Model):
     question = models.OneToOneField(Question, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.question.question_text;
+
 class YesNoQuestion(models.Model):
     question = models.OneToOneField(Question, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.question.question_text;
+
 class MultipleChoiceQuestion(models.Model):
     question = models.OneToOneField(Question, on_delete=models.CASCADE)
-    answers = models.CharField(max_length=512)
+    answers = models.CharField(max_length=512, default="[]")
+
+    def __str__(self):
+        return self.question.question_text;
 
 class AnswerSet(models.Model):
     questionaire = models.ForeignKey(Questionaire, on_delete=models.CASCADE)
