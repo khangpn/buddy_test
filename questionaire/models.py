@@ -2,10 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils import timezone
-
-class User(models.Model):
-    name = models.CharField(max_length=32)
-    password = models.CharField(max_length=64)
+from django.contrib.auth.models import User
 
 class Questionaire(models.Model):
     title = models.CharField(max_length=128, unique=True)
