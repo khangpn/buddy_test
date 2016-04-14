@@ -48,12 +48,6 @@ class Question(models.Model):
         if not self.id:
             if self.question_type in Question.TYPES_LIST:
                 question_meta = eval(self.question_type)()
-            #if self.question_type == "TextQuestion":
-            #    question_meta = TextQuestion()
-            #elif self.question_type == "YesNoQuestion":
-            #    question_meta = YesNoQuestion()
-            #elif self.question_type == "MultipleChoiceQuestion":
-            #    question_meta = MultipleChoiceQuestion()
 
         super(Question, self).save(*args, **kwargs)
 
@@ -110,6 +104,9 @@ class Answer(models.Model):
     created_at = models.DateTimeField(editable=False);
     updated_at = models.DateTimeField(editable=False);
 
+    def __str__(self):
+        return self.question.question_text;
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.created_at = timezone.now()
@@ -135,10 +132,19 @@ class TextAnswer(models.Model):
     answer = models.OneToOneField(Answer, on_delete=models.CASCADE)
     answer_text = models.CharField(max_length=1028, null=True)
 
+    def __str__(self):
+        return "User:Question %d:%d" % (self.answer.answer_set.user.id, self.answer.question.id)
+
 class YesNoAnswer(models.Model):
     answer = models.OneToOneField(Answer, on_delete=models.CASCADE)
-    yes = models.NullBooleanField();
+    yes = models.NullBooleanField()
+
+    def __str__(self):
+        return "User:Question %d:%d" % (self.answer.answer_set.user.id, self.answer.question.id)
 
 class MultipleChoiceAnswer(models.Model):
     answer = models.OneToOneField(Answer, on_delete=models.CASCADE)
     answers = models.CharField(max_length=512, null=True)
+
+    def __str__(self):
+        return "User:Question %d:%d" % (self.answer.answer_set.user.id, self.answer.question.id)
