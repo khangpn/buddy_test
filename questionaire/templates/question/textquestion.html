@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if question %}
+<div>{{ question.question_text }}</div>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'questionaire:answer' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="question_id" value="{{question.id}}"/>
+    <input type="hidden" name="answer_set_id" value="{{answer_set.id}}"/>
+
+    {% if answer %}
+    <input type="hidden" name="answer_id" value="{{ answer.id }}"/>
+    <input type="text" name="answer_text" value="{{ answer.textanswer.answer_text }}"/>
+    {% else %}
+    <input type="text" name="answer_text"/>
+    {% endif %}
+<input type="submit" value="Submit" />
+</form>
+{% endif %}
+
+{% endblock %}

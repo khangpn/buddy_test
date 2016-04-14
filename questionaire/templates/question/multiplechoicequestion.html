@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if question %}
+<div>{{ question.question_text }}</div>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'questionaire:answer' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="question_id" value="{{question.id}}"/>
+    <input type="hidden" name="answer_set_id" value="{{answer_set.id}}"/>
+
+    {% for k, v in multiple.iteritems %}
+    <input type="checkbox" name="answer_text" id="choice{{ forloop.counter }}" 
+        value="{{ k }}" 
+        {% if v == 1 %}checked{% endif %}
+    />
+    <label for="choice{{ forloop.counter }}">{{ k }}</label><br />
+    {% endfor %}
+<input type="submit" value="Submit" />
+</form>
+{% endif %}
+
+{% endblock %}

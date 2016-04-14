@@ -4,8 +4,8 @@
 
 {% if questionaire %}
     <ul>
-    {% for question in questionaire.questions %}
-        <li><a href="{% url 'questionaire:detail' question.id }">{{ question.question_text }}</a></li>
+    {% for question in questions %}
+        <li><a href="{% url 'questionaire:question_detail' questionaire.id question.id %}">{{ question.question_text }}</a></li>
     {% endfor %}
     </ul>
 {% endif %}
