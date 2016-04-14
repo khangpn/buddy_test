@@ -24,3 +24,14 @@ Technologies:
     Code in Github
     Code hosted somewhere (e.g. on Heroku free account) to demonstrate the application in function
 
+Usages:
+
+    - Use admin page (http://url.to.the.page/admin)for managing questionaires, questions, and users.
+    - Can create questionaire along with multiple questions. But the question metadata such as answers for multiple choice question must be inserted in the MultipleChoiceQuestion admin page.
+    - Use http://url.to.the.page/questionaire to answer questionaire (login required).
+    - Changed questions will create a new version one (on branch question_provision). Use admin question's actions to select the version
+
+Assumption:
+
+    - Not handle setting multiple versions of the same question selected.
+    - Not implement localisation
