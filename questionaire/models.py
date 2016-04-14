@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 class Questionaire(models.Model):
     title = models.CharField(max_length=128, unique=True)
     description = models.TextField()
+    size = models.IntegerField(default=0, editable=False)
     created_at = models.DateTimeField(editable=False);
     updated_at = models.DateTimeField(editable=False);
 
@@ -26,10 +27,12 @@ class Question(models.Model):
         ('MultipleChoiceQuestion', 'Multiple Choice Question'),
     )
     TYPES_LIST = ['TextQuestion', 'YesNoQuestion', 'MultipleChoiceQuestion']
-    questionaire = models.ForeignKey(Questionaire, on_delete=models.CASCADE)
-    question_text = models.CharField(max_length=512, unique=True)
+    questionaire = models.ForeignKey(Questionaire, on_delete=models.CASCADE, null=True)
+    question_text = models.CharField(max_length=512)
     question_type = models.CharField(max_length=128, choices=QUESTION_TYPES)
+    index = models.IntegerField(default=0, editable=False)
     version = models.IntegerField(default=1, editable=False)
+    selected = models.BooleanField(default=True)
     created_at = models.DateTimeField(editable=False);
     updated_at = models.DateTimeField(editable=False);
 

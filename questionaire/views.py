@@ -15,7 +15,8 @@ def detail(request, questionaire_id):
     if request.user.is_authenticated():
         questionaire = get_object_or_404(Questionaire, pk=questionaire_id)
 
-        questions = questionaire.question_set.order_by('created_at')
+        #questions = questionaire.question_set.order_by('created_at')
+        questions = Question.objects.filter(questionaire_id=questionaire.id, selected=True).order_by('created_at')
 
         # Create answer_set for first time visit
         try:
